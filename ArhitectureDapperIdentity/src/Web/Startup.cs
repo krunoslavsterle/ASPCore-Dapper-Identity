@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
+using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -43,11 +44,11 @@ namespace Web
                 .AddUserStore<UserStore>()
                 .AddDefaultTokenProviders();
 
-            
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IUnitOfWorkFactory, UnitOfWorkFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -37,6 +37,15 @@ namespace Infrastructure.Data.Repositories
             }
         }
 
+        public Task CreateAsync(User user, IUnitOfWork uow)
+        {
+            string insertQuery = $@"
+                    INSERT INTO ""User"" (""DateCreated"", ""DateUpdated"", ""Email"", ""FirstName"", ""Id"", ""LastName"", ""PasswordHash"", ""Username"")  
+                    VALUES (@DateCreated, @DateUpdated, @Email, @FirstName, @Id, @LastName, @PasswordHash, @Username)";
+
+            return uow.DbTransaction.Connection.ExecuteAsync(insertQuery, user, uow.DbTransaction);
+        }
+
         public Task<User> GetByIdAsync(Guid Id)
         {
             throw new NotImplementedException();
