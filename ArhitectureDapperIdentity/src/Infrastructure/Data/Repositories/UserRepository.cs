@@ -46,9 +46,18 @@ namespace Infrastructure.Data.Repositories
             return uow.DbTransaction.Connection.ExecuteAsync(insertQuery, user, uow.DbTransaction);
         }
 
-        public Task<User> GetByIdAsync(Guid Id)
+        public async Task<User> GetByIdAsync(Guid Id)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = Connection)
+            {
+                string query = $@"
+                SELECT * FROM ""User"" 
+                WHERE ""Id"" = @Id";
+
+                conn.Open();
+                var result = await conn.QueryAsync<User>(query, new { Id = Id });
+                return result.FirstOrDefault();
+            }   
         }
 
         public Task<User> GetByNameAsync(string name)

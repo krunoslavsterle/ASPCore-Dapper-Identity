@@ -17,6 +17,7 @@ namespace Infrastructure.Data
         public UnitOfWork()
         {
             _dbConnection = new NpgsqlConnection(connectionString);
+            _dbConnection.Open();
             _dbTransaction = _dbConnection.BeginTransaction();
         }
         
@@ -24,7 +25,6 @@ namespace Infrastructure.Data
         {
             try
             {
-                _dbConnection.Open();
                 return _dbTransaction.CommitAsync();
             }
             catch

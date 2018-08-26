@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
 
@@ -10,6 +11,15 @@ namespace Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IUserRepository _userRepository;
+
+        public HomeController(IUnitOfWorkFactory unitOfWorkFactory, IUserRepository userRepository)
+        {
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _userRepository = userRepository;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -17,8 +27,10 @@ namespace Web.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            var uow = _unitOfWorkFactory.Create();
 
+
+            ViewData["Message"] = "Your application description page.";
             return View();
         }
 
